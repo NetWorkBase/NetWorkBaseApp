@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataBaseConfig>
+  <DbType>sqlserver</DbType>
+  <DataSource>localhost</DataSource>
+  <UserID>sa</UserID>
+  <Password>wcw840525.</Password>
+  <DataBase>SchoolExam</DataBase>
+  <Port>1433</Port>
+  <Pooling>True</Pooling>
+  <EncodingName></EncodingName>
+</DataBaseConfig>

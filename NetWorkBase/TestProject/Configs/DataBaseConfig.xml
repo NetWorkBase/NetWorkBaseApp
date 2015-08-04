@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataBaseConfig>
+  <DataBaseType>SqlServer</DataBaseType>
+  <DataSource>local</DataSource>
+  <UserID>sa</UserID>
+  <Password>wcw840525.</Password>
+  <DataBase>MProject</DataBase>
+  <Port>1433</Port>
+  <Pooling>True</Pooling>
+  <EncodingName></EncodingName>
+</DataBaseConfig>

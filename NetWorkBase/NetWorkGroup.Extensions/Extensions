@@ -1,0 +1,833 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.UI.WebControls;
+
+namespace System
+{
+    /// <summary>
+    /// 公用扩展类
+    /// </summary>
+    public static class NetWorkGroupExtensions_Old
+    {
+        #region [基础信息相关]
+        /// <summary>
+        /// 执行转换，常应用在枚举转换
+        /// </summary>
+        /// <typeparam name="TOutput">输出类型</typeparam>
+        /// <param name="obj1">实现了IConvertible的类型</param>
+        /// <returns>转换后的类型</returns>
+        public static TOutput To<TOutput>(this IConvertible obj1)
+        {
+            return (TOutput)((IConvertible)obj1).ToType(typeof(TOutput), null);
+        }
+        /// <summary>
+        /// 将任意引用类型转换为指定的引用类型
+        /// </summary>
+        /// <typeparam name="T">转换的结果类型</typeparam>
+        /// <param name="obj">任意类型</param>
+        /// <returns></returns>
+        public static T As<T>(this object obj)
+            where T : class
+        {
+            return obj as T;
+        }
+        /// <summary>
+        /// 根据长度截取指定的字符串，并将结果输出多出部分用省略号代替
+        /// </summary>
+        /// <param name="Text">带截取的文本</param>
+        /// <param name="Length">长度</param>
+        /// <returns>返回切除后的结果</returns>
+        public static String OutDotText(this String Text, Int32 Length)
+        {
+            String tmp = String.Empty;
+            if (Text.Length >= Length)
+            {
+
+                tmp = Text.Substring(0, Length) + "...";
+            }
+            else
+            {
+                tmp = Text;
+            }
+            return tmp;
+        }
+        /// <summary>
+        /// 判断任意类型是否是Null 
+        /// </summary>
+        /// <typeparam name="T">任意类型</typeparam>
+        /// <param name="obj">任意类型</param>
+        /// <returns>Boolean</returns>
+        public static bool IsNull<T>(this T obj)
+        {
+            return (obj == null);
+        }
+        /// <summary>
+        /// 判断任意类型是否不是Null 
+        /// </summary>
+        /// <typeparam name="T">任意类型</typeparam>
+        /// <param name="obj">任意类型</param>
+        /// <returns>Boolean</returns>
+        public static bool IsNotNull<T>(this T obj)
+        {
+            return !obj.IsNull<T>();
+        }
+        /// <summary>
+        /// 将制定类型的属性复制到选定的类型 
+        /// </summary>
+        /// <typeparam name="T">任意引用类型</typeparam>
+        /// <param name="tSource">要复制的类型的实例</param>
+        /// <param name="tDestination">要复制的目标类型的实例</param>
+        public static void CopyObjectProperty<T>(this T tSource, T tDestination) where T : class
+        {
+            foreach (PropertyInfo item in tSource.GetType().GetProperties())
+            {
+                if (!item.Name.Contains("The") && !(item.Name.ToStringTrim().ToUpper() == "ID"))
+                {
+                    item.SetValue(tDestination, item.GetValue(tSource, null), null);
+                }
+            }
+        }
+        /// <summary>
+        /// 将输入的字符串输出为ToString().Trim()的字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj">任意类型的数据</param>
+        /// <returns>返回的字符串</returns>
+        public static string ToStringTrim<T>(this T obj)
+        {
+            if (obj.IsNull<T>())
+            {
+                throw new Exception("传入的信息没有任何System.String数据！");
+            }
+            return obj.ToString().Trim();
+        }
+        /// <summary>
+        /// 将字符串转换为MD5加密
+        /// </summary>
+        /// <param name="_Str">待转换的字符串类型</param>
+        /// <returns></returns>
+        public static string ToMd5(this string _Str)
+        {
+            if (string.IsNullOrEmpty(_Str))
+            {
+                throw new Exception("待转换的字符串不能为空！");
+            }
+            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
+            return BitConverter.ToString(md5.ComputeHash(Encoding.Default.GetBytes(_Str))).Replace("-", "");
+        }
+        /// <summary>
+        /// 根据当前的日期获取星期几
+        /// </summary>
+        /// <param name="datetime">当前日期</param>
+        /// <returns></returns>
+        public static string ToWeekday(this DateTime datetime)
+        {
+            return "星期" + "日一二三四五六"[(int)datetime.DayOfWeek];
+        }
+        /// <summary>
+        /// 将任意类型转换为为ToInt64
+        /// <para>为Boolean时，True返回1，False返回0</para>
+        /// <para>若待转换的类型原本为ToInt64那么直接返回</para>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public static long ToInt64<T>(this T o)
+        {
+            long x = 0L;
+            if (o.GetType() == typeof(bool))
+            {
+                bool b;
+                bool.TryParse(o.ToString().Trim(), out b);
+                return (b ? ((long)1) : ((long)0));
+            }
+            if (o.GetType() == typeof(int))
+            {
+                return Convert.ToInt64(o);
+            }
+            if (!long.TryParse(o.ToString(), out x))
+            {
+                throw new Exception("将数据：【" + o.GetType().ToStringTrim<Type>() + "】转换为Int64失败！");
+            }
+            return x;
+        }
+        /// <summary>
+        /// 将任意类型转换为为Int32 
+        /// <para>为Boolean时，True返回1，False返回0</para>
+        /// <para>若待转换的类型原本为Int32那么直接返回</para>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o">任意类型数据</param>
+        /// <returns>Int32</returns>
+        public static int ToInt32<T>(this T o)
+        {
+            int x = 0;
+            
+            if (!string.IsNullOrEmpty(o.ToString().Trim()))
+            {
+                if (o.GetType() == typeof(bool))
+                {
+                    bool b;
+                    bool.TryParse(o.ToString().Trim(), out b);
+                    return (b ? 1 : 0);
+                }
+                if (o.GetType() == typeof(int))
+                {
+                    return Convert.ToInt32(o);
+                }
+                if (o.GetType() == typeof(Enum))
+                {
+                    return Convert.ToInt32(o);
+                }
+                if (!int.TryParse(o.ToString(), out x))
+                {
+                    throw new Exception("将数据：【" + o.GetType().ToStringTrim<Type>() + "】转换为Int32失败！");
+                }
+                return x;
+            }
+            return 0;
+        }
+        /// <summary>
+        /// 将任意类型转换为为Double 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="o">任意对象</param>
+        /// <returns>Double</returns>
+        public static double ToDouble<T>(this T o)
+        {
+            double x = 0.0;
+            if (o.GetType() == typeof(string))
+            {
+                return Convert.ToDouble(o.ToString().Trim());
+            }
+            if (o.GetType() == typeof(object))
+            {
+                return Convert.ToDouble(o.ToString().Trim());
+            }
+            if (o == null)
+            {
+                x = 0.0;
+            }
+            return x;
+        }
+        /// <summary>
+        /// 将DataTable转换为实体属性类的集合
+        /// </summary>
+        /// <typeparam name="T">任意实体类</typeparam>
+        /// <param name="dt">数据表</param>
+        /// <returns>List&lt;T&gt;</returns>
+        public static List<T> ToList<T>(this DataTable dt) where T : class,new()
+        {
+            List<T> list = new List<T>();
+
+            try
+            {
+                var properties = typeof(T).GetProperties();
+                foreach (DataRow item in dt.Rows)
+                {
+                    T t = new T();
+                    foreach (var p in properties)
+                    {
+                        p.SetValue(t, item[p.Name], null);
+                    }
+                    list.Add(t);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DataTable中的数据无法转换到类型为“" + typeof(T).ToString() + "”，详细信息：" + ex.ToString() + "！");
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        /// 将任意类型转换为DateTime 
+        /// </summary>
+        /// <typeparam name="T">任意类型</typeparam>
+        /// <param name="obj">任意类型</param>
+        /// <returns>DateTime</returns>
+        public static DateTime ToDateTime<T>(this T obj)
+        {
+            DateTime dt;
+            if (!DateTime.TryParse(obj.ToString().Trim(), out dt))
+            {
+                throw new Exception("将数据：【" + obj.GetType().ToStringTrim<Type>() + "】转换为DateTime失败！");
+            }
+            return dt;
+        }
+        /// <summary>
+        /// 将指定的集合类转换为指定类型的数组
+        /// </summary>
+        /// <typeparam name="T">返回类型</typeparam>
+        /// <param name="items">集合类列表</param>
+        /// <returns>T[]</returns>
+        public static T[] AsArray<T>(this ICollection items)
+        {
+            List<T> list = new List<T>();
+            foreach (var item in items)
+            {
+                list.Add((T)item);
+            }
+            return list.ToArray();
+        }
+        /// <summary>
+        /// 根据正则表达式将字符串中的HTML标签过滤并获取纯文本说明
+        /// </summary>
+        /// <param name="Content">要截取的字符串</param>
+        /// <returns>返回正则匹配过的所有数据</returns>
+        public static String ClearHtml(this String Content)
+        {
+            //删除脚本
+            Content = Regex.Replace(Content, @"<script[^>]*?>.*?</script>", "", RegexOptions.IgnoreCase);
+            //删除HTML
+            Content = Regex.Replace(Content, @"<(.[^>]*)>", "", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"([\r\n])[\s]+", "", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"-->", "", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"<!--.*", "", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(quot|#34);", "\"", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(amp|#38);", "&", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(lt|#60);", "<", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(gt|#62);", ">", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(nbsp|#160);", " ", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(iexcl|#161);", "\xa1", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(cent|#162);", "\xa2", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(pound|#163);", "\xa3", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&(copy|#169);", "\xa9", RegexOptions.IgnoreCase);
+            Content = Regex.Replace(Content, @"&#(\d+);", "", RegexOptions.IgnoreCase);
+            Content.Replace("<", "");
+            Content.Replace(">", "");
+            Content.Replace("\r\n", "");
+            Content = HttpContext.Current.Server.HtmlEncode(Content).Trim();
+            return Content;
+        }
+        #endregion
+
+        #region [DropDownList树形下拉列表相关]
+        /// <summary>
+        /// 生成树的时候添加树标示
+        /// </summary>
+        /// <param name="num">个数</param>
+        /// <returns>字符串</returns>
+        public static string MakeBlank(this int num)
+        {
+            string str = string.Empty;
+            for (int i = 0; i < num; i++)
+            {
+                if (num == 1 || num - i == 1)
+                {
+                    str += "　┕┉";
+                }
+                else
+                {
+                    str += "　";
+                }
+            }
+            return str;
+        }
+
+        #region [以下递归树形下拉菜单的方法已经不适配新接口数据2013年12月12日17:56:29（王诚武）]
+        ///// <summary>
+        ///// 用于生成一个树形的DropDownList选择项
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="Data"></param>
+        ///// <param name="Server"></param>
+        ///// <returns></returns>
+        //[Obsolete("此方法已经失效，将在后期移除，请参考使用ShowSelectListItemByTreeReload方法")]
+        //public static IEnumerable<SelectListItem> ShowSelectListItemByTree<T>(this IQueryable<T> Data) where T : IModelWithPID<Int64?>
+        //{
+        //    List<SelectListItem> list = new List<SelectListItem>();
+        //    foreach (var item in Data.Where(p => p.PID == 0 || p.PID == null))
+        //    {
+        //        list.Add(new SelectListItem() { Text = item.Name.Trim(), Value = item.ID.ToString() });
+        //        ShowInner(Data, item.ID, list);
+        //    }
+        //    return list;
+        //}
+        //
+        //private static void ShowInner<T>(IQueryable<T> data, Int64 ParID, List<SelectListItem> parent) where T : IModelWithPID<Int64?>
+        //{
+        //    foreach (var item in data.Where(p => p.PID == ParID))
+        //    {
+        //        parent.Add(new SelectListItem() { Text = (deep++).MakeBlank() + item.Name, Value = item.ID.ToString() });
+        //        ShowInner(data, item.ID, parent);
+        //    }
+        //    if (deep > 1)
+        //    {
+        //        deep--;
+        //    }
+        //}
+        #endregion
+        static int deep = 1;
+        /// <summary>
+        /// 用于生成一个树形的DropDownList选择项
+        /// </summary>
+        /// <typeparam name="T">实现了IModelDropDown&lt;T&gt;的类型</typeparam>
+        /// <typeparam name="TType">表示主接口IModelID&lt;T&gt;的名称为Name的类型</typeparam>
+        /// <param name="Data">IQueryable&lt;T&gt;数据</param>
+        /// <returns>IEnumerable&lt;SelectListItem&gt;</returns>
+        public static IEnumerable<SelectListItem> ShowSelectListItemByTree<T, TType>(this IQueryable<T> Data) where T : IModelDropDown<TType>
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var item in Data.Where(p => p.PID.Equals(0) || p.PID == null))
+            {
+                list.Add(new SelectListItem() { Text = item.Name.Trim(), Value = item.ID.ToString() });
+                ShowInner<T, TType>(Data, item.ID, list);
+            }
+            return list;
+        }
+
+        private static void ShowInner<T, TType>(IQueryable<T> data, TType ParID, List<SelectListItem> parent) where T : IModelDropDown<TType>
+        {
+            foreach (var item in data.Where(p => p.PID.Equals(ParID)))
+            {
+                parent.Add(new SelectListItem() { Text = (deep++).MakeBlank() + item.Name, Value = item.ID.ToString() });
+                ShowInner<T, TType>(data, item.ID, parent);
+            }
+            if (deep > 1)
+            {
+                deep--;
+            }
+        }
+        #endregion
+
+        #region [图形图片截取相关]
+        /// <summary>
+        /// 将图片按照指定的宽高度截取并输出
+        /// </summary>
+        public static MemoryStream ScalingImage<T>(this T model, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class,IModelImageUrl, new()
+        {
+            var image = model;
+            if (image.ImageUrl == null)
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    NetWorkGroup.Extensions.Properties.Resources.NoImage.Save(stream, ImageFormat.Png);
+                    return stream;
+                }
+            }
+            else
+            {
+                var FileName = Server.MapPath(image.ImageUrl.Trim());
+                FileInfo fileinfo = new FileInfo(FileName);
+                String SavedPath = Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ThumbImage"].Trim() + fileinfo.GetNewFileNameByWidthAndHeight(Width, Height));
+                if (System.IO.File.Exists(SavedPath))
+                {
+                    using (FileStream fs = new FileInfo(SavedPath).OpenRead())
+                    {
+                        using (MemoryStream stream = fs.SetMemoryStreamValue())
+                        {
+                            return stream;
+                        }
+                    }
+                }
+                else
+                {
+                    if (fileinfo.Exists)
+                    {
+                        using (System.Drawing.Image oldImage = new Bitmap(fileinfo.FullName.Trim()))
+                        {
+                            using (System.Drawing.Image newImage = new Bitmap(oldImage, Width, Height))
+                            {
+                                using (MemoryStream stream = new MemoryStream())
+                                {
+                                    newImage.Save(stream, ImageFormat.Png);
+                                    newImage.Save(Server.MapPath(System.Configuration.ConfigurationManager.AppSettings["ThumbImage"].Trim() +
+                                        fileinfo.GetNewFileNameByWidthAndHeight(Width, Height)));
+                                    return stream;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            NetWorkGroup.Extensions.Properties.Resources.NoImage.Save(stream, ImageFormat.Png);
+                            return stream;
+                        }
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 将文件流转化为内存流
+        /// </summary>
+        /// <param name="fs">带转化的文件流</param>
+        /// <returns>转化后的内存流</returns>
+        public static MemoryStream SetMemoryStreamValue(this Stream fs)
+        {
+            try
+            {
+                int length = (int)fs.Length;
+                byte[] data = new byte[length];
+                fs.Position = 0;
+                fs.Read(data, 0, length);
+                return new MemoryStream(data);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message.Trim());
+            }
+        }
+        /// <summary>
+        /// 根据指定的宽度和高度获取新的文件名
+        /// </summary>
+        /// <param name="f">表示一个System.IO.FileInfo对象</param>
+        /// <param name="Width">文件的宽度</param>
+        /// <param name="Height">文件的高度</param>
+        /// <returns>返回新的文件名</returns>
+        public static String GetNewFileNameByWidthAndHeight(this FileInfo f, Int32 Width, Int32 Height)
+        {
+            return Path.GetFileNameWithoutExtension(f.Name.Trim()) + "_" + Width + "_" + Height + ".png"; ;
+        }
+        /// <summary>
+        /// 将图片按照指定的宽高度截取并输出
+        /// </summary>
+        /// <param name="byWidth">是否是根据宽度等比缩放，如果此项为False则按照高度缩放</param>
+        /// <param name="model">实现了IModelImageUrl的类型</param>
+        /// <param name="Height">指定截取后的图片高度</param>
+        /// <param name="Server">HttpServerUtilityBase对象用以查找服务器端指定的路径</param>
+        /// <param name="Width">指定截取后的图片宽度</param>
+        /// <returns>MemoryStream</returns>
+        public static MemoryStream ScalingImage<T>(this T model, bool byWidth, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class,IModelImageUrl, new()
+        {
+            var image = model;
+            if (image.ImageUrl == null)
+            {
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    NetWorkGroup.Extensions.Properties.Resources.NoImage.Save(stream, ImageFormat.Png);
+                    return stream;
+                }
+            }
+            else
+            {
+                var FileName = Server.MapPath(image.ImageUrl.Trim());
+                FileInfo fileinfo = new FileInfo(FileName);
+                String SavedPath = Server.MapPath(ConfigurationManager.AppSettings["ThumbImage"].Trim() + fileinfo.GetNewFileNameByWidthAndHeight(Width, Height));
+                if (System.IO.File.Exists(SavedPath))
+                {
+                    using (FileStream fs = new FileInfo(SavedPath).OpenRead())
+                    {
+                        using (MemoryStream stream = fs.SetMemoryStreamValue())
+                        {
+                            return stream;
+                        }
+                    }
+                }
+                else
+                {
+                    if (fileinfo.Exists)
+                    {
+                        using (System.Drawing.Image oldPic = new Bitmap(fileinfo.FullName.Trim()))
+                        {
+                            int p = (byWidth ? Width * oldPic.Height / oldPic.Width : Height * oldPic.Width / oldPic.Height);
+                            using (System.Drawing.Image newPic = (byWidth ? new Bitmap(oldPic, Width, p) : new Bitmap(oldPic, p, Height)))
+                            {
+                                using (MemoryStream stream = new MemoryStream())
+                                {
+                                    newPic.Save(SavedPath, ImageFormat.Png);
+                                    newPic.Save(stream, ImageFormat.Png);
+                                    return stream;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        using (MemoryStream stream = new MemoryStream())
+                        {
+                            NetWorkGroup.Extensions.Properties.Resources.NoImage.Save(stream, ImageFormat.Png);
+                            return stream;
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region [分页相关]
+        /// <summary>
+        /// 分页扩展方法
+        /// </summary>
+        /// <typeparam name="T">任意类型</typeparam>
+        /// <param name="helper">HtmlHelper</param>
+        /// <param name="pagerOptions">分页配置程序</param>
+        /// <returns>分页代码</returns>
+        public static MvcHtmlString Pager<T>(this HtmlHelper helper, PagerOptions<T> pagerOptions)
+        {
+            Int32 maxPage = (pagerOptions.MaxRecord % pagerOptions.PageSize > 0 ? pagerOptions.MaxRecord / pagerOptions.PageSize + 1 : pagerOptions.MaxRecord / pagerOptions.PageSize);
+            Int32 page = 1;
+            String requestPage = helper.ViewContext.HttpContext.Request["page"];
+            String currentPageUrl = helper.ViewContext.HttpContext.Request.Url.PathAndQuery.ToLower();
+            Regex regexPage = new Regex(@"page=(\d+)", RegexOptions.IgnoreCase);
+            if (regexPage.IsMatch(currentPageUrl))
+            {
+                Match match = regexPage.Matches(currentPageUrl)[0];
+                currentPageUrl = currentPageUrl.Replace("?" + match.Groups[0].Value, String.Empty).Replace("&" + match.Groups[0].Value, String.Empty);
+            }
+            String spliter = "?";
+            if (currentPageUrl.Contains("?"))
+            {
+                spliter = "&";
+            }
+            if (requestPage != null)
+            {
+                try
+                {
+                    page = Convert.ToInt32(requestPage);
+                }
+                catch { page = 1; }
+                page = page > maxPage ? maxPage : (page <= 0 ? 1 : page);
+            }
+            StringBuilder sbReturn = new StringBuilder();
+            StringBuilder sbPager = new StringBuilder("<div class=\"" + pagerOptions.PagerCssClass + "\">");
+            if (pagerOptions.MaxRecord > pagerOptions.PageSize)
+            {
+                sbPager.Append("<a" + (page == 1 ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + "\"") + ">首页</a>");
+                if (page - 1 > 0)
+                {
+                    sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + (page - 1) + "\">上一页</a>");
+                }
+                if (page + pagerOptions.MorePage <= maxPage)
+                {
+                    for (long i = page; i <= page + pagerOptions.MorePage; i++)
+                    {
+                        if (i < maxPage)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    if (maxPage >= pagerOptions.MorePage)
+                    {
+                        for (long i = maxPage - pagerOptions.MorePage + 1; i < maxPage; i++)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                    }
+                    else
+                    {
+                        for (long i = 1; i <= maxPage; i++)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                    }
+                }
+                if (page + 1 <= maxPage)
+                {
+                    sbPager.Append("<a" + (page >= maxPage ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + spliter + "Page=" + (page + 1) + "\"") + ">下一页</a>");
+                }
+                sbPager.Append("<a" + (page >= maxPage ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + spliter + "Page=" + maxPage + "\"") + ">末页</a>");
+                sbPager.Append("&nbsp;共" + maxPage + "页&nbsp;" + pagerOptions.MaxRecord + "条记录&nbsp;");
+                sbPager.Append("<input type=\"text\" id=\"Pages\" class=\"inputNum\" /><input type=\"button\" class=\"btnGo\" onclick='if($(\"#Pages\").val()==\"\"){alert(\"请输入页码！\");}else{if(isNaN($(\"#Pages\").val())){alert(\"页码必须输入数字！\");}else{if(!($(\"#Pages\").val()>" + maxPage + ")){location.href=\"" + currentPageUrl + spliter + "Page=\"+$(\"#Pages\").val();}else{alert(\"输入的页数不能大于总页数！\");}}}' value=\"跳转\" />");
+            }
+            sbPager.Append("</div>");
+
+            sbReturn.AppendLine(sbPager.ToString());
+            return MvcHtmlString.Create(sbReturn.ToString().Trim());
+        }
+        /// <summary>
+        /// 分页扩展方法用于模态对话框
+        /// </summary>
+        /// <typeparam name="T">任意类型</typeparam>
+        /// <param name="helper">HtmlHelper</param>
+        /// <param name="pagerOptions">分页配置程序</param>
+        /// <returns>分页代码</returns>
+        public static MvcHtmlString PagerDialog<T>(this HtmlHelper helper, PagerOptions<T> pagerOptions)
+        {
+            Int32 maxPage = (pagerOptions.MaxRecord % pagerOptions.PageSize > 0 ? pagerOptions.MaxRecord / pagerOptions.PageSize + 1 : pagerOptions.MaxRecord / pagerOptions.PageSize);
+            Int32 page = 1;
+            String requestPage = helper.ViewContext.HttpContext.Request["page"];
+            String currentPageUrl = helper.ViewContext.HttpContext.Request.Url.PathAndQuery.ToLower();
+            Regex regexPage = new Regex(@"page=(\d+)", RegexOptions.IgnoreCase);
+            if (regexPage.IsMatch(currentPageUrl))
+            {
+                Match match = regexPage.Matches(currentPageUrl)[0];
+                currentPageUrl = currentPageUrl.Replace("?" + match.Groups[0].Value, String.Empty).Replace("&" + match.Groups[0].Value, String.Empty);
+            }
+            String spliter = "?";
+            if (currentPageUrl.Contains("?"))
+            {
+                spliter = "&";
+            }
+            if (requestPage != null)
+            {
+                try
+                {
+                    page = Convert.ToInt32(requestPage);
+                }
+                catch { page = 1; }
+                page = page > maxPage ? maxPage : (page <= 0 ? 1 : page);
+            }
+            StringBuilder sbReturn = new StringBuilder();
+            StringBuilder sbPager = new StringBuilder("<div class=\"" + pagerOptions.PagerCssClass + "\">");
+            if (pagerOptions.MaxRecord > pagerOptions.PageSize)
+            {
+                sbPager.Append("<a" + (page == 1 ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + "\"") + ">首页</a>");
+                if (page - 1 > 0)
+                {
+                    sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + (page - 1) + "\">上一页</a>");
+                }
+                if (page + pagerOptions.MorePage < maxPage)
+                {
+                    for (long i = page; i <= page + pagerOptions.MorePage; i++)
+                    {
+                        if (i < maxPage)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    if (maxPage >= pagerOptions.MorePage)
+                    {
+                        for (long i = maxPage - pagerOptions.MorePage; i <= maxPage; i++)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                    }
+                    else
+                    {
+                        for (long i = 1; i <= maxPage; i++)
+                        {
+                            sbPager.Append("<a href=\"" + currentPageUrl + spliter + "Page=" + i + "\" class=\"" + (i == page ? "on" : "") + "\">" + i + "</a>");
+                        }
+                    }
+                }
+                if (page + 1 <= maxPage)
+                {
+                    sbPager.Append("<a" + (page >= maxPage ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + spliter + "Page=" + (page + 1) + "\"") + ">下一页</a>");
+                }
+                sbPager.Append("\r\n<script type=\"text/javascript\">\r\n");
+                sbPager.Append("var Functions = function () {\r\n");
+                sbPager.Append("this.go_link = function (url) {\r\n");
+                sbPager.Append("var link = document.createElement(\"a\");\r\n");
+                sbPager.Append("link.href = url;\r\n");
+                sbPager.Append("document.body.appendChild(link);\r\n");
+                sbPager.Append("link.click();");
+                sbPager.Append("};\r\n");
+                sbPager.Append("};\r\n");
+                sbPager.Append("var funcs=new Functions();\r\n");
+                sbPager.Append("</script>\r\n");
+                sbPager.Append("<a" + (page >= maxPage ? " href=\"javascript:;\"  class=\"disabled\"" : " href=\"" + currentPageUrl + spliter + "Page=" + maxPage + "\"") + ">末页</a>");
+                sbPager.Append("&nbsp;共" + maxPage + "页&nbsp;" + pagerOptions.MaxRecord + "条记录&nbsp;");
+                sbPager.Append("<input type=\"text\" id=\"Pages\" class=\"inputNum\" /><input type=\"button\" class=\"btnGo\" onclick='if($(\"#Pages\").val()==\"\"){alert(\"请输入页码！\");}else{if(isNaN($(\"#Pages\").val())){alert(\"页码必须输入数字！\");}else{if(!($(\"#Pages\").val()>" + maxPage + ")){funcs.go_link(\"" + currentPageUrl + spliter + "Page=\"+$(\"#Pages\").val());}else{alert(\"输入的页数不能大于总页数！\");}}}' value=\"跳转\" />");
+            }
+            sbPager.Append("</div>");
+
+            sbReturn.AppendLine(sbPager.ToString());
+            return MvcHtmlString.Create(sbReturn.ToString().Trim());
+        }
+        /// <summary>
+        /// 根据模板将keywords值替换所选择字符转中的数据
+        /// </summary>
+        /// <param name="str">目标字符串</param>
+        /// <param name="keywords">替换字符串</param>
+        /// <param name="replaceTemplate">HTML模板</param>
+        /// <returns>String</returns>
+        public static string ReplaceEx(this String str, string keywords, String replaceTemplate)
+        {
+            String ret = str;
+            Regex reg = new Regex(keywords, RegexOptions.IgnoreCase);
+            if (reg.IsMatch(str))
+            {
+                foreach (Match m in reg.Matches(str))
+                {
+                    ret = reg.Replace(str, string.Format(replaceTemplate, m.Value));
+                }
+            }
+            return ret;
+        }
+        /// <summary>
+        /// 根据keywords值替换所选择字符转中的数据使用红色关键字作为模板
+        /// </summary>
+        /// <param name="str">目标字符串</param>
+        /// <param name="keywords">替换字符串</param>
+        /// <returns>String</returns>
+        public static string ReplaceExRedFont(this String str, string keywords)
+        {
+            return ReplaceEx(str, keywords, "<font color=\"red\">{0}</font>");
+        }
+        /// <summary>
+        /// 根据keywords值替换所选择字符转中的数据使用粗体字关键字作为模板
+        /// </summary>
+        /// <param name="str">目标字符串</param>
+        /// <param name="keywords">替换字符串</param>
+        /// <returns>String</returns>
+        public static string ReplaceExBold(this String str, string keywords)
+        {
+            return ReplaceEx(str, keywords, "<b>{0}</b>");
+        }
+        /// <summary>
+        /// 根据keywords值替换所选择字符转中的数据使用斜体字关键字作为模板
+        /// </summary>
+        /// <param name="str">目标字符串</param>
+        /// <param name="keywords">替换字符串</param>
+        /// <returns>String</returns>
+        public static string ReplaceExItalic(this String str, string keywords)
+        {
+            return ReplaceEx(str, keywords, "<em>{0}</em>");
+        }
+        
+        #endregion
+
+        #region [页面信息相关]
+        /// <summary>
+        /// 根据指定的菜单信息，递归生成改菜单下所有子菜单中的文章
+        /// </summary>
+        /// <typeparam name="TArticle">实现了IModelParentID &lt;T &gt;的任意类</typeparam>
+        /// <typeparam name="TArticleItem">实现了IModelParentID &lt;T &gt;的任意类</typeparam>
+        /// <typeparam name="TType">表示文章所述的ID的类型</typeparam>
+        /// <param name="obj">所有的文章信息</param>
+        /// <param name="ParnetMenu">当前的父菜单</param>
+        /// <param name="Menus">所有菜单</param>
+        /// <param name="alloc">ref 结果</param>
+        public static void GetArticle<TArticle, TArticleItem, TType>(this IQueryable<TArticle> obj, TArticleItem ParnetMenu, IQueryable<TArticleItem> Menus, ref List<TArticle> alloc)
+            where TArticleItem : IModelParentID<TType>
+            where TArticle : IModelItemID<TType>
+        {
+            if (ParnetMenu != null && ParnetMenu.PID.Equals(0))
+            {
+                alloc.AddRange(obj.Where(p => p.ItemID.Equals(ParnetMenu.ID)));
+            }
+            foreach (var item in Menus.Where(p => p.PID.Equals(ParnetMenu.ID)))
+            {
+                var x = obj.Where(p => p.ItemID.Equals(item.ID));
+                if (x != null)
+                {
+                    alloc.AddRange(x);
+                }
+                GetArticle<TArticle, TArticleItem, TType>(obj, item, Menus, ref alloc);
+            }
+        }
+        #endregion
+    }
+}

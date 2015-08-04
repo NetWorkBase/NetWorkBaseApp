@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Core", "NetWorkGroup.Core\NetWorkGroup.Core.csproj", "{1597BE10-FF48-45C8-B805-B593083EFCC0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Data", "NetWorkGroup.Data\NetWorkGroup.Data.csproj", "{6F35038F-DBB3-4949-BCB4-0BB848978C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Extensions", "NetWorkGroup.Extensions\NetWorkGroup.Extensions.csproj", "{93C87649-B873-47B1-ABDE-C74E464AEFD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Interfaces", "NetWorkGroup.Interfaces\NetWorkGroup.Interfaces.csproj", "{B36E00ED-7AC3-4B7E-BEB5-6FF5E90BE1D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Mvc", "NetWorkGroup.Mvc\NetWorkGroup.Mvc.csproj", "{12E07341-8CB6-4CB7-AE8D-7F7C295E0EBF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JS", "JS", "{4A9AAB8A-7410-4276-A86D-EFB2211DC3C8}"
+	ProjectSection(SolutionItems) = preProject
+		JS\Common.js = JS\Common.js
+		JS\DataPicker-Zh-Cn.js = JS\DataPicker-Zh-Cn.js
+		JS\Silverlight.js = JS\Silverlight.js
+		JS\SilverlightFuct.js = JS\SilverlightFuct.js
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Entity", "NetWorkGroup.Entity\NetWorkGroup.Entity.csproj", "{7934AEA5-852D-48EB-AE76-3EBB8B2A5466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{19B8C524-2227-4461-A349-E1892B481C0B}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 8
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://sxpwcwtfs.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = NetWorkGroup.Core\\NetWorkGroup.Core.csproj
+		SccProjectName1 = NetWorkGroup.Core
+		SccLocalPath1 = NetWorkGroup.Core
+		SccProjectUniqueName2 = NetWorkGroup.Data\\NetWorkGroup.Data.csproj
+		SccProjectName2 = NetWorkGroup.Data
+		SccLocalPath2 = NetWorkGroup.Data
+		SccProjectUniqueName3 = NetWorkGroup.Entity\\NetWorkGroup.Entity.csproj
+		SccProjectName3 = NetWorkGroup.Entity
+		SccLocalPath3 = NetWorkGroup.Entity
+		SccProjectUniqueName4 = NetWorkGroup.Extensions\\NetWorkGroup.Extensions.csproj
+		SccProjectName4 = NetWorkGroup.Extensions
+		SccLocalPath4 = NetWorkGroup.Extensions
+		SccProjectUniqueName5 = NetWorkGroup.Interfaces\\NetWorkGroup.Interfaces.csproj
+		SccProjectName5 = NetWorkGroup.Interfaces
+		SccLocalPath5 = NetWorkGroup.Interfaces
+		SccProjectUniqueName6 = NetWorkGroup.Mvc\\NetWorkGroup.Mvc.csproj
+		SccProjectName6 = NetWorkGroup.Mvc
+		SccLocalPath6 = NetWorkGroup.Mvc
+		SccProjectUniqueName7 = TestProject\\TestProject.csproj
+		SccProjectName7 = TestProject
+		SccLocalPath7 = TestProject
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1597BE10-FF48-45C8-B805-B593083EFCC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1597BE10-FF48-45C8-B805-B593083EFCC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1597BE10-FF48-45C8-B805-B593083EFCC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1597BE10-FF48-45C8-B805-B593083EFCC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F35038F-DBB3-4949-BCB4-0BB848978C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F35038F-DBB3-4949-BCB4-0BB848978C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F35038F-DBB3-4949-BCB4-0BB848978C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F35038F-DBB3-4949-BCB4-0BB848978C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93C87649-B873-47B1-ABDE-C74E464AEFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93C87649-B873-47B1-ABDE-C74E464AEFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93C87649-B873-47B1-ABDE-C74E464AEFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93C87649-B873-47B1-ABDE-C74E464AEFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B36E00ED-7AC3-4B7E-BEB5-6FF5E90BE1D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B36E00ED-7AC3-4B7E-BEB5-6FF5E90BE1D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B36E00ED-7AC3-4B7E-BEB5-6FF5E90BE1D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B36E00ED-7AC3-4B7E-BEB5-6FF5E90BE1D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12E07341-8CB6-4CB7-AE8D-7F7C295E0EBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12E07341-8CB6-4CB7-AE8D-7F7C295E0EBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12E07341-8CB6-4CB7-AE8D-7F7C295E0EBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12E07341-8CB6-4CB7-AE8D-7F7C295E0EBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7934AEA5-852D-48EB-AE76-3EBB8B2A5466}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7934AEA5-852D-48EB-AE76-3EBB8B2A5466}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7934AEA5-852D-48EB-AE76-3EBB8B2A5466}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7934AEA5-852D-48EB-AE76-3EBB8B2A5466}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19B8C524-2227-4461-A349-E1892B481C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19B8C524-2227-4461-A349-E1892B481C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19B8C524-2227-4461-A349-E1892B481C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19B8C524-2227-4461-A349-E1892B481C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

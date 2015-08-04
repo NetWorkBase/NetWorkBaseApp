@@ -1,0 +1,27 @@
+﻿@model IQueryable<School.Models.ArticleType<Int32>>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>View1</title>
+</head>
+<body>
+    <div>
+        @foreach (var item in Model)
+        {
+            <li>@item.Name</li>
+        }
+        @{
+            var x = Model.ShowSelectListItemByTree<School.Models.ArticleType<Int32>, Int32>();
+            
+        }
+        @Html.DropDownListFor(p => p.Single().Name, x)
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DataBaseConfig>
+  <DataBaseType>SqlServer</DataBaseType>
+  <DataSource>192.168.1.88</DataSource>
+  <UserID>192.168.1.88</UserID>
+  <Password>wcw840525.</Password>
+  <DataBase>EDU_YXXT</DataBase>
+  <Port></Port>
+  <Pooling>True</Pooling>
+  <EncodingName></EncodingName>
+</DataBaseConfig>

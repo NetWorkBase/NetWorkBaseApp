@@ -1,0 +1,29 @@
+﻿更新日志：<br />
+【1.1.0.1】<br />
+&nbsp;&nbsp;更新冲突的方法名称。
+【1.1.0.0】<br />
+&nbsp;&nbsp;1、废弃原有接口，将名称空间移除，所有系统内置接口分别包含在System主名称空间下，此次接口重新命名：<br />
+&nbsp;&nbsp; IModelID&lt;T&gt;、IModelName、IModelImageUrl、IModelParentID&lt;T&gt;:IModelID&lt;T&gt;、IModelItemID&lt;T&gt;、IModelDropDown&lt;T&gt;<br />
+&nbsp;&nbsp; 2修改相关扩展程序实现，根据现有API接口支持，废弃原有功能，请在使用时备份原有程序。<br />
+【1.0.1.9】<br />
+&nbsp;&nbsp;1、加入新的泛型Model接口，更大的扩展性<br />
+&nbsp;&nbsp;2、修改扩展程序集部分功能，加入对新接口的支持<br />
+&nbsp;&nbsp;3、新的接口位于System.OverLoad名称空间内<br />
+    
+【1.0.1.8】<br />
+加入对Asp.Net的扩展程序集支持：<br />
+&nbsp;&nbsp;1、加入System.MRHNull结构体，返回一个为空的数据，此类型为标记类型不具备任何功能<br />
+&nbsp;&nbsp;2、加入Alert&lt;T&gt;方法，向页面输出JavaScript Window.Alert()对话框<br />
+&nbsp;&nbsp;3、加入Confirm&lt;T&gt;方法，向页面输出JavaScript Window.Confirm()对话框<br />
+&nbsp;&nbsp;4、加入LocationHref&lt;T&gt;方法，向页面输出JavaScript Window.location跳转功能<br />
+<br />
+<br />
+发布1.0.1.0版本，对底层接口进行重构，加入对泛型的更好支持，修正已有的BUG，加入扩展程序集新功能AsArray&lt;T&gt;，对扩展程序集进行升级，加入对HtmlString分页的支持，加入说明文件<br />
+<br /><br />
+
+MDTS(Mrhuo Developer Tools)是Mrhuo工作室推出的基于Asp.Net MVC4的开发工具包，其中包含了数据库传统处理的支持以及对Linq的支持，欢迎大家下载使用，
+~本框架包含了一部分扩展方法和底层抽象，后期我们将上传对这套框架的详细API说明，此版本为预览版本，欢迎大家多多吐槽多多给出意见。<br /><br />
+
+本程序使用System.Web.Mvc程序集，请添加对其的引用，部分位置还使用System.Data.Linq，也请大家对其引用<br /><br />
+
+<div style="text-align:center;">本程序及其组件版权归Mrhuo工作室所有  2011-2013 (c) <a href="http://www.mrhuo.com">需要更多信息请访问MrhuoStudio http://www.mrhuo.com</a></div>
