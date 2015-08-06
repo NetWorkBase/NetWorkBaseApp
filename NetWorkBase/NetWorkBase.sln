@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Core", "NetWorkGroup.Core\NetWorkGroup.Core.csproj", "{1597BE10-FF48-45C8-B805-B593083EFCC0}"
 EndProject
@@ -25,34 +25,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetWorkGroup.Entity", "NetW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{19B8C524-2227-4461-A349-E1892B481C0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication2", "WebApplication2\WebApplication2.csproj", "{145E1CCA-12CF-4562-92F6-2D41D85E61F1}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://sxpwcwtfs.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = NetWorkGroup.Core\\NetWorkGroup.Core.csproj
-		SccProjectName1 = NetWorkGroup.Core
-		SccLocalPath1 = NetWorkGroup.Core
-		SccProjectUniqueName2 = NetWorkGroup.Data\\NetWorkGroup.Data.csproj
-		SccProjectName2 = NetWorkGroup.Data
-		SccLocalPath2 = NetWorkGroup.Data
-		SccProjectUniqueName3 = NetWorkGroup.Entity\\NetWorkGroup.Entity.csproj
-		SccProjectName3 = NetWorkGroup.Entity
-		SccLocalPath3 = NetWorkGroup.Entity
-		SccProjectUniqueName4 = NetWorkGroup.Extensions\\NetWorkGroup.Extensions.csproj
-		SccProjectName4 = NetWorkGroup.Extensions
-		SccLocalPath4 = NetWorkGroup.Extensions
-		SccProjectUniqueName5 = NetWorkGroup.Interfaces\\NetWorkGroup.Interfaces.csproj
-		SccProjectName5 = NetWorkGroup.Interfaces
-		SccLocalPath5 = NetWorkGroup.Interfaces
-		SccProjectUniqueName6 = NetWorkGroup.Mvc\\NetWorkGroup.Mvc.csproj
-		SccProjectName6 = NetWorkGroup.Mvc
-		SccLocalPath6 = NetWorkGroup.Mvc
-		SccProjectUniqueName7 = TestProject\\TestProject.csproj
-		SccProjectName7 = TestProject
-		SccLocalPath7 = TestProject
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -86,6 +61,10 @@ Global
 		{19B8C524-2227-4461-A349-E1892B481C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19B8C524-2227-4461-A349-E1892B481C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19B8C524-2227-4461-A349-E1892B481C0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{145E1CCA-12CF-4562-92F6-2D41D85E61F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{145E1CCA-12CF-4562-92F6-2D41D85E61F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{145E1CCA-12CF-4562-92F6-2D41D85E61F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{145E1CCA-12CF-4562-92F6-2D41D85E61F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

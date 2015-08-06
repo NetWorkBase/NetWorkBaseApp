@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NetWorkGroup.Data.SqlServer;
 using NetWorkGroup.Data;
+using System.Data;
 
 namespace TestProject
 {
@@ -16,13 +17,16 @@ namespace TestProject
             Console.Read();
         }
 
-        static DbConnectionString db1 = DbConnectionString.Create(DataBaseType.SqlServer, "www.mrhuo.com", "mrpject", "zhiweikeji", "MProject", 52705, true);
+        static DbConnectionString db1 = DbConnectionString.Create(DataBaseType.SqlServer, "121.40.193.211", "sa", "3e8i9o8i", "youkong_log", 1433, true);
         static void TestSqlServerDataBase()
         {
             SqlServerDb db = new SqlServerDb(db1);
-            db.cmdText = "SELECT * FROM TB_USER";
-            var ret=db.Execute(System.Data.CommandType.Text);
-            Console.WriteLine(ret);
+            db.cmdText = "SELECT * FROM ALLTABLES";
+            var ret = db.Execute<DataTable>(CommandType.Text).AsEnumerable();
+            foreach (var item in ret)
+            {
+                Console.WriteLine(item[1].ToString());
+            }
         }
     }
 }

@@ -249,11 +249,11 @@ namespace NetWorkGroup.Data
                 String ret = String.Empty;
                 if (IsWebApplication)
                 {
-                    ret = HttpContext.Current.Server.MapPath("~/Configs/DataBaseConfig.xml");
+                    ret = HttpContext.Current.Server.MapPath("~/Configs/DataBaseConfig.Config");
                 }
                 else
                 {
-                    ret = AppDomain.CurrentDomain.BaseDirectory + "Configs\\DataBaseConfig.xml";
+                    ret = AppDomain.CurrentDomain.BaseDirectory + "Configs\\DataBaseConfig.Config";
                 }
                 return ret;
             }

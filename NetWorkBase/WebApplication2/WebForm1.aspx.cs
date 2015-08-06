@@ -11,8 +11,9 @@ namespace WebApplication2
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Entity<School.Models.ArticleType<Int32>> logic = new Entity<School.Models.ArticleType<int>>();
-            Response.Write(logic.Show().Count());
+            NetWorkGroup.Data.SqlServer.SqlServerDb db = new NetWorkGroup.Data.SqlServer.SqlServerDb();
+            db.cmdText = "SELECT GETDATE()  as 'CURRENT_TIME'";
+            var ret = db.Execute(System.Data.CommandType.Text);
         }
     }
 }
