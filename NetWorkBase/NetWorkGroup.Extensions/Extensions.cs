@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -1052,5 +1053,28 @@ namespace System
             return list;
         }
         #endregion
+
+        /// <summary>
+        /// 将一个NameValueCollection类型的数据转化到Dictionary&lt;string,string&gt;
+        /// </summary>
+        /// <param name="nameValue"></param>
+        /// <returns></returns>
+        public static Dictionary<string, string> ToDictionary(this NameValueCollection nameValue, Func<string, string> keyProcess = null)
+        {
+            var dict = new Dictionary<string, string>();
+            if (nameValue != null)
+            {
+                foreach (string item in nameValue)
+                {
+                    var key = item;
+                    if (keyProcess != null)
+                    {
+                        key = keyProcess(key);
+                    }
+                    dict.Add(key, nameValue[item]);
+                }
+            }
+            return dict;
+        }
     }
 }
