@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data;
 
 namespace NetWorkGroup.Abstraction
 {
@@ -14,24 +15,28 @@ namespace NetWorkGroup.Abstraction
     /// <para>包含查询、根据主键查询、根据外键查询等</para>
     /// </summary>
     /// <typeparam name="TModel">模型层,约束为：<para>必须为引用类型</para><para>并且具有无参数的构造函数</para><para>并且实现IModel接口</para></typeparam>
-    public abstract class AbstractBase<TModel> : CoreBase where TModel : class , new()
+    public abstract class AbstractBase<TModel> : CoreBase where TModel : class, new()
     {
         /// <summary>
         /// 默认构造函数
         /// </summary>
-        public AbstractBase() { }
+        public AbstractBase()
+        {
+            _dbContext= new DbContext<TModel>();
+        }
         /// <summary>
         /// 构造函数重载
         /// </summary>
         /// <param name="ConnectionString">数据库连接字符串</param>
         public AbstractBase(DbConnectionString ConnectionString)
         {
-            this._connString = ConnectionString;
+            this.ConnectionString = ConnectionString;
+            _dbContext = new DbContext<TModel>((IDbConnection)new SqlServerDb(ConnectionString).Connection);
         }
         /// <summary>
         /// 内部成员，表示LINQ TO SQL支持点的属性使用
         /// </summary>
-        private DbContext<TModel> _dbContext = new DbContext<TModel>();
+        private DbContext<TModel> _dbContext;
         /// <summary>
         /// 获取或者设置一个值，该值表示数据上下文，此属性为LINQ TO SQL提供支持
         /// </summary>

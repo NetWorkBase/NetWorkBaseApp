@@ -22,7 +22,7 @@ namespace NetWorkGroup.Data
         /// </summary>
         public static readonly DbConnectionString Empty = new DbConnectionString();
 
-        private DbConnectionString(DataBaseType DbType, String DataSource, String UserName, String Password, String DataBase, Int32 Port = 0, Boolean IsPooling = true, String EncodingName = "utf8")
+        public DbConnectionString(DataBaseType DbType, String DataSource, String UserName, String Password, String DataBase, Int32 Port = 0, Boolean IsPooling = true, String EncodingName = "utf8")
         {
             this._DataSource = DataSource;
             this._UserID = UserName;
