@@ -234,7 +234,7 @@ namespace System
         /// <typeparam name="T">任意实体类</typeparam>
         /// <param name="dt">数据表</param>
         /// <returns>List&lt;T&gt;</returns>
-        public static List<T> ToList<T>(this DataTable dt) where T : class,new()
+        public static List<T> ToList<T>(this DataTable dt) where T : class, new()
         {
             List<T> list = new List<T>();
 
@@ -428,6 +428,24 @@ namespace System
             }
             return list;
         }
+        /// <summary>
+        /// 根据一个父级菜单递归所有子菜单
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="Data"></param>
+        /// <param name="ParentItem"></param>
+        /// <param name="IsCreateEmptyItem"></param>
+        /// <returns></returns>
+        public static IEnumerable<SelectListItem> ShowSelectListItemByParentItem<T, TType>(this IQueryable<T> Data, T ParentItem, Boolean IsCreateEmptyItem = true) where T : IModelDropDown<TType>
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (IsCreateEmptyItem)
+                list.Add(new SelectListItem() { Text = "【请选择】", Value = "0", Selected = true });
+            list.Add(new SelectListItem() { Text = ParentItem.Name, Value = ParentItem.ID.ToStringTrim() });
+            ShowInner<T, TType>(Data, ParentItem.ID, list);
+            return list;
+        }
         private static void ShowInner<T, TType>(IQueryable<T> data, TType ParID, List<SelectListItem> parent) where T : IModelDropDown<TType>
         {
             foreach (var item in data.Where(p => p.PID.Equals(ParID)))
@@ -524,7 +542,7 @@ namespace System
         /// <summary>
         /// 将图片按照指定的宽高度截取并输出
         /// </summary>
-        public static MemoryStream ScalingImage<T>(this T model, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class,IModelImageUrl, new()
+        public static MemoryStream ScalingImage<T>(this T model, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class, IModelImageUrl, new()
         {
             var image = model;
             if (image.ImageUrl == null)
@@ -636,7 +654,7 @@ namespace System
         /// <param name="Server">HttpServerUtilityBase对象用以查找服务器端指定的路径</param>
         /// <param name="Width">指定截取后的图片宽度</param>
         /// <returns>MemoryStream</returns>
-        public static MemoryStream ScalingImage<T>(this T model, bool byWidth, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class,IModelImageUrl, new()
+        public static MemoryStream ScalingImage<T>(this T model, bool byWidth, System.Web.HttpServerUtilityBase Server, Int32 Width = 100, Int32 Height = 100) where T : class, IModelImageUrl, new()
         {
             var image = model;
             if (image.ImageUrl == null)
@@ -1037,7 +1055,7 @@ namespace System
                 GetParentItemFinall<T>(obj, item, ref objs);
             }
         }
-        public static IEnumerable<SelectListItem> GetInnerItemWithOptions<T, TType>(this IQueryable<T> obj, T TheParentItem, Expression<Func<T, bool>> KeyValue,int x) where T : IModelID<TType>, IModelParentID<TType>, IModelName, IModelDropDown<TType>, new()
+        public static IEnumerable<SelectListItem> GetInnerItemWithOptions<T, TType>(this IQueryable<T> obj, T TheParentItem, Expression<Func<T, bool>> KeyValue, int x) where T : IModelID<TType>, IModelParentID<TType>, IModelName, IModelDropDown<TType>, new()
         {
             List<SelectListItem> list = new List<SelectListItem>();
             if (x == 0)
@@ -1075,6 +1093,32 @@ namespace System
                 }
             }
             return dict;
+        }
+
+        private static Stack<String> stack = null;
+
+        private static string value = null;
+        /// <summary>
+        /// 根据当前类型逆向递归父类型
+        /// </summary>
+        /// <typeparam name="TItem"></typeparam>
+        /// <typeparam name="TType">索引自增字段类型</typeparam>
+        /// <param name="obj">当前类别对象</param>
+        /// <param name="Data">类别对象数据</param>
+        /// <param name="SplitString">分隔符，默认为“->”</param>
+        /// <returns></returns>
+        public static string GetParentItem<TItem, TType>(this TItem obj, IQueryable<TItem> Data, String SplitString = "->") where TItem : IModelDropDown<TType>
+        {
+            stack = new Stack<string>();
+            value = string.Empty;
+            foreach (var i in Data.Where(p => p.ID.Equals(obj.PID)))
+            {
+                stack.Push(i.Name + SplitString);
+                GetParentItem<TItem, TType>(i, Data);
+            }
+            stack.Push(obj.Name);
+            value += stack.Pop() + SplitString;
+            return value.CutLastString(SplitString);
         }
     }
 }
