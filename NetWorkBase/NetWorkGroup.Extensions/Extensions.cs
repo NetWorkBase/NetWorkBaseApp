@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -99,7 +100,7 @@ namespace System
         {
             foreach (PropertyInfo item in tSource.GetType().GetProperties())
             {
-                if (!item.Name.Contains("The") && !(item.Name.ToStringTrim().ToUpper() == "ID"))
+                if (!item.Name.Contains("The") && !(item.Name.ToStringTrim().ToUpper() == "ID") && !(item.Name.Contains("Init")))
                 {
                     item.SetValue(tDestination, item.GetValue(tSource, null), null);
                 }
@@ -1119,6 +1120,20 @@ namespace System
             stack.Push(obj.Name);
             value += stack.Pop() + SplitString;
             return value.CutLastString(SplitString);
+        }
+        /// <summary>
+        /// 将格式为：yyyyMMdd-yyyyMMdd格式的时间值转换为自定义值，并且可自定义分隔符号
+        /// </summary>
+        /// <param name="DateTimeValue">yyyyMMdd-yyyyMMdd格式的时间</param>
+        /// <param name="Formart">输出的两段时间的格式化方式</param>
+        /// <param name="SplitString">两个时间的分隔符</param>
+        /// <returns>处理完成的时间数据</returns>
+        public static String ConvertableDateTime(this string DateTimeValue,String Formart,String SplitString)
+        {
+            var DateTimes = DateTimeValue;
+            var dateTimel = DateTime.ParseExact(DateTimes.Split('-')[0], "yyyyMMdd", CultureInfo.CurrentCulture);
+            var dateTimer = DateTime.ParseExact(DateTimes.Split('-')[1], "yyyyMMdd", CultureInfo.CurrentCulture);
+            return dateTimel.ToString(Formart) + SplitString + dateTimer.ToString(Formart);
         }
     }
 }
